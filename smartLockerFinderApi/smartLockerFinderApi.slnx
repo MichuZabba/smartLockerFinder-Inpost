@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="smartLockerFinderApi/smartLockerFinderApi.csproj" />
+  <Project Path="smartLockerFinderApiTests/smartLockerFinderApiTests.csproj" Id="0e8308e0-000c-443d-817e-db8a9cdcbc56" />
+</Solution>
