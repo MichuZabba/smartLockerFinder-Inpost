@@ -1,0 +1,114 @@
+:root {
+  --text: #5d5d67;
+  --text-h: #11121a;
+  --muted: #6f7482;
+  --bg: #f3f5fb;
+  --panel: rgba(255, 255, 255, 0.72);
+  --surface: rgba(255, 255, 255, 0.64);
+  --surface-strong: rgba(255, 255, 255, 0.9);
+  --border: rgba(17, 18, 26, 0.12);
+  --border-soft: rgba(17, 18, 26, 0.08);
+  --code-bg: #f4f3ec;
+  --chip-bg: rgba(0, 87, 255, 0.1);
+  --accent: #0057ff;
+  --accent-strong: #003fd6;
+  --accent-shadow: rgba(0, 87, 255, 0.28);
+  --focus-ring: rgba(0, 87, 255, 0.16);
+  --shadow:
+    rgba(17, 18, 26, 0.12) 0 20px 50px -24px,
+    rgba(17, 18, 26, 0.06) 0 8px 20px -10px;
+
+  --sans: 'Segoe UI', 'Trebuchet MS', sans-serif;
+  --heading: Georgia, 'Times New Roman', serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top right, rgba(0, 87, 255, 0.12), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(255, 174, 0, 0.12), transparent 24%),
+    var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #b5b8c8;
+    --text-h: #f4f6fb;
+    --muted: #9096aa;
+    --bg: #0f1116;
+    --panel: rgba(20, 23, 31, 0.76);
+    --surface: rgba(25, 29, 38, 0.72);
+    --surface-strong: rgba(28, 33, 45, 0.92);
+    --border: rgba(255, 255, 255, 0.1);
+    --border-soft: rgba(255, 255, 255, 0.08);
+    --code-bg: #1f2028;
+    --chip-bg: rgba(120, 170, 255, 0.12);
+    --accent: #6aa6ff;
+    --accent-strong: #3b82f6;
+    --accent-shadow: rgba(106, 166, 255, 0.28);
+    --focus-ring: rgba(106, 166, 255, 0.2);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 20px 50px -24px,
+      rgba(0, 0, 0, 0.24) 0 8px 20px -10px;
+  }
+}
+
+#root {
+  width: min(1240px, 100%);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 100svh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: clamp(2.4rem, 4.8vw, 4.7rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+h2 {
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 118%;
+  letter-spacing: -0.03em;
+}
+
+p {
+  margin: 0;
+}
+
+code {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
