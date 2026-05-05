@@ -1,16 +1,16 @@
 # Inwentaryzator paczkomatów
 
 Repozytorium zawiera projekt do wyszukiwania / inwentaryzacji paczkomatów (smart lockerów) z podziałem na:
-- **Frontend**: aplikacja webowa `smartLockerFinder` (React + Vite + Leaflet / React-Leaflet)
-- **Backend/API**: katalog `Inwentaryzator_paczkomatow_Api` (API + testy)
+- **Frontend**: aplikacja webowa `smartLockerFinderFront` (React + Vite + Leaflet / React-Leaflet)
+- **Backend/API**: katalog `smartLockerFinderApi` (API + testy)
 
 ---
 
 ## Struktura projektu
 
-- `smartLockerFinder/` – aplikacja kliencka (mapa + UI)
-- `Inwentaryzator_paczkomatow_Api/` – część serwerowa (API) oraz testy
-  - `Inwentaryzator_paczkomatow_Api/` – właściwy projekt API
+- `smartLockerFinderFront/` – aplikacja kliencka (mapa + UI)
+- `smartLockerFinderApi/` – część serwerowa (API) oraz testy
+  - `smartLockerFinderApi/` – właściwy projekt API
   - `smartLockerFinderApiTests/` – testy API
 
 ---
@@ -71,9 +71,9 @@ npm run lint
 
 Część API znajduje się w katalogu:
 
-- `Inwentaryzator_paczkomatow_Api/`
+- `smartLockerFinderApi/`
 
 W tym repozytorium jest też katalog testów API:
 
-- `Inwentaryzator_paczkomatow_Api/smartLockerFinderApiTests/`
+- `smartLockerFinderApi/smartLockerFinderApiTests/`
 
