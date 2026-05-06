@@ -15,5 +15,5 @@ public record ParcelLockerItemDto
     public AdressDetails? AddressDetails { get; set; }
 
     [JsonPropertyName("functions")]
-    public string[]? Functions { get; set; }
+    public string[] Functions { get; set; } = [];
 }

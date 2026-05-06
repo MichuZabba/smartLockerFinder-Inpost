@@ -5,6 +5,7 @@ using Inwentaryzator_paczkomatow_Api.Application.Responses;
 using Inwentaryzator_paczkomatow_Api.Domain.Entities;
 using Moq;
 using Moq.Protected;
+using smartLockerFinderApi.Application.Client.Interface;
 using smartLockerFinderApi.Application.Dto;
 using smartLockerFinderApi.Domain.Entities;
 using smartLockerFinderApi.Domain.Intefaces;
@@ -20,7 +21,7 @@ namespace smartLockerFinderApiTests.Application.Handlers
         private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
         private readonly HttpClient _httpClient;
         private readonly FetchParcelLockerDataRequestHandler _handler;
-
+        private readonly Mock<IInpostClientWrapper> _inpostClientWrapperMock;
         public FetchParcelLockerDataRequestHandlerTests()
         {
             _serviceMock = new Mock<IParcelLockerService>();
@@ -29,8 +30,9 @@ namespace smartLockerFinderApiTests.Application.Handlers
             {
                 BaseAddress = new System.Uri("https://api-global-points.easypack24.net/")
             };
+            _inpostClientWrapperMock = new Mock<IInpostClientWrapper>();
 
-            _handler = new FetchParcelLockerDataRequestHandler(_httpClient, _serviceMock.Object);
+            _handler = new FetchParcelLockerDataRequestHandler(_httpClient, _serviceMock.Object, _inpostClientWrapperMock.Object);
         }
 
         [Fact]
@@ -45,38 +47,29 @@ namespace smartLockerFinderApiTests.Application.Handlers
             };
             var request = new FetchParcelLockerDataRequest(requestDto);
 
-            _serviceMock.Setup(s => s.BuildPointsUrl(location))
-                .Returns("https://api.test/points");
-
             var mockApiResponse = new ParcelLockerApiResponse
             {
                 Items = new List<ParcelLockerItemDto>
-                {
-                    new ParcelLockerItemDto 
-                    { 
-                        Name = "Locker1", 
-                        AddressDetails = new AdressDetails { City = "Krakow", Street = "Dluga" },
-                        Location = new LocationData()
-                    }
-                }
+    {
+        new ParcelLockerItemDto
+        {
+            Name = "Locker1",
+            AddressDetails = new AdressDetails { City = "Krakow", Street = "Dluga" },
+            Location = new LocationData()
+        }
+    }
             };
 
-            var jsonResponse = JsonSerializer.Serialize(mockApiResponse);
-            var responseMessage = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(jsonResponse)
-            };
+            // Mockuj wrapper bezpośrednio — nie HttpClient
+            _inpostClientWrapperMock
+                .Setup(w => w.GetParcelLockerData(location, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(mockApiResponse);
 
-            _httpMessageHandlerMock.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(responseMessage);
-
-            _serviceMock.Setup(s => s.FilterLockersByFunctions(It.IsAny<IEnumerable<ParcelLockerItemDto>>(), It.IsAny<LockerFunctionsFilter>()))
-                .Returns(mockApiResponse.Items);
+            _serviceMock
+                .Setup(s => s.FilterLockersByFunctions(
+                    It.IsAny<IEnumerable<ParcelLockerItemDto>>(),
+                    It.IsAny<LockerFunctionsFilter>()))
+                .Returns(mockApiResponse.Items.ToList());
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);
@@ -106,7 +99,7 @@ namespace smartLockerFinderApiTests.Application.Handlers
 
             var mockApiResponse = new ParcelLockerApiResponse
             {
-                Items = new List<ParcelLockerItemDto>() // Empty list
+                Items = new List<ParcelLockerItemDto>()
             };
 
             var jsonResponse = JsonSerializer.Serialize(mockApiResponse);
