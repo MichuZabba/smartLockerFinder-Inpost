@@ -1,6 +1,6 @@
 import type { SearchRequestBody, SearchResponse } from '../models'
 
-const API_ENDPOINT = 'https://localhost:44380/api/ParcelLocker/Fetch'
+const API_ENDPOINT = 'http://localhost:8080/api/ParcelLocker/Fetch'
 
 /**
  * Search for parcel lockers based on city, street, and filters
