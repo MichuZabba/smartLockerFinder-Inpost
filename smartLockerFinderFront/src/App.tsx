@@ -63,7 +63,6 @@ function App() {
       location: {
         longitude: mapCenter.lng,
         latitude: mapCenter.lat,
-        limit: 300,
       },
       filterFunctions: {
         returnEnabled: allowReturn,

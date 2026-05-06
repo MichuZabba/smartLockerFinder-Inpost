@@ -63,14 +63,10 @@ public class ParcelLockerService : IParcelLockerService
         {
             var queryParams = new List<string>();
 
-            int safeLimit = Math.Clamp(location.Limit ?? 100, 1, 300);
-
             var lat = location.Latitude.ToString(CultureInfo.InvariantCulture);
             var lon = location.Longitude.ToString(CultureInfo.InvariantCulture);
 
             queryParams.Add($"relative_point={lat},{lon}");
-            queryParams.Add("page=1");
-            queryParams.Add($"per_page={safeLimit}");
 
             return $"{BaseUrl}?{string.Join("&", queryParams)}";
         }
