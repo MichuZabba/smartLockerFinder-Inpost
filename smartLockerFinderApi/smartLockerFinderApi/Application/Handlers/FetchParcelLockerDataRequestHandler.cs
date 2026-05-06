@@ -1,6 +1,7 @@
 ﻿using Inwentaryzator_paczkomatow_Api.Application.Requests;
 using Inwentaryzator_paczkomatow_Api.Application.Responses;
 using MediatR;
+using smartLockerFinderApi.Application.Client.Interface;
 using smartLockerFinderApi.Application.Dto;
 using smartLockerFinderApi.Application.Responses;
 using smartLockerFinderApi.Domain.Intefaces;
@@ -12,30 +13,29 @@ public class FetchParcelLockerDataRequestHandler : IRequestHandler<FetchParcelLo
 {
     private readonly HttpClient _httpClient;
     private readonly IParcelLockerService _parcelLockerService;
+    private readonly IInpostClientWrapper _inpostClientWrapper;
 
-    public FetchParcelLockerDataRequestHandler(HttpClient httpClient, IParcelLockerService parcelLockerService)
+    public FetchParcelLockerDataRequestHandler(HttpClient httpClient, IParcelLockerService parcelLockerService, IInpostClientWrapper inpostClientWrapper)
     {
         _httpClient = httpClient;
         _parcelLockerService = parcelLockerService;
+        _inpostClientWrapper = inpostClientWrapper;
     }
 
     public async Task<FetchParcelLockerDataResponse> Handle(FetchParcelLockerDataRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var url = _parcelLockerService.BuildPointsUrl(request.Request.Location);
-            var responseData = await _httpClient.GetFromJsonAsync<ParcelLockerApiResponse>(url, cancellationToken);
+            var unfilteredParcelLockers = await _inpostClientWrapper.GetParcelLockerData(request.Request.Location, cancellationToken);
 
-            if (responseData?.Items == null || !responseData.Items.Any())
+            if (unfilteredParcelLockers?.Items == null || !unfilteredParcelLockers.Items.Any())
             {
                 return Failure("Nie znaleziono punktów w podanej lokalizacji.");
             }
 
-            var allItems = responseData.Items.AsEnumerable();
+            var filteredParcelLockers = _parcelLockerService.FilterLockersByFunctions(unfilteredParcelLockers.Items, request.Request.FilterFunctions);
 
-            var filteredItems = _parcelLockerService.FilterLockersByFunctions(allItems, request.Request.FilterFunctions);
-
-            var responseItems = filteredItems.Select(i => new ParcelLockerDataResponse
+            var responseItems = filteredParcelLockers.Select(i => new ParcelLockerDataResponse
             {
                 Name = i.Name ?? "",
                 City = i.AddressDetails?.City ?? "",
