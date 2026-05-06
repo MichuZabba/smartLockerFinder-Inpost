@@ -37,7 +37,7 @@ namespace smartLockerFinderApiTests.Application.Handlers
         public async Task Handle_ReturnsSuccess_WhenDataIsPresent()
         {
             // Arrange
-            var location = new LocationData { Latitude = 50.0, Longitude = 19.0, Limit = 10 };
+            var location = new LocationData { Latitude = 50.0, Longitude = 19.0 };
             var requestDto = new ParcelLockerDataDTO
             {
                 Location = location,
@@ -93,7 +93,7 @@ namespace smartLockerFinderApiTests.Application.Handlers
         public async Task Handle_ReturnsFailure_WhenNoPointsFound()
         {
             // Arrange
-            var location = new LocationData { Latitude = 50.0, Longitude = 19.0, Limit = 10 };
+            var location = new LocationData { Latitude = 50.0, Longitude = 19.0 };
             var requestDto = new ParcelLockerDataDTO
             {
                 Location = location,

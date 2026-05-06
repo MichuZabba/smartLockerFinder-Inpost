@@ -6,5 +6,4 @@
 export interface SearchLocation {
   longitude: number
   latitude: number
-  limit: number
 }

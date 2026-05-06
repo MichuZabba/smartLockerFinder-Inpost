@@ -28,7 +28,7 @@ namespace smartLockerFinderApiTests.Api.Controllers
             // Arrange
             var requestDto = new ParcelLockerDataDTO
             {
-                Location = new LocationData { Latitude = 50.0, Longitude = 19.0, Limit = 10 },
+                Location = new LocationData { Latitude = 50.0, Longitude = 19.0 },
                 FilterFunctions = new LockerFunctionsFilter(false, false)
             };
 
@@ -61,7 +61,7 @@ namespace smartLockerFinderApiTests.Api.Controllers
              // Arrange
             var requestDto = new ParcelLockerDataDTO
             {
-                Location = new Inwentaryzator_paczkomatow_Api.Domain.Entities.LocationData { Latitude = 50.0, Longitude = 19.0, Limit = 10 },
+                Location = new Inwentaryzator_paczkomatow_Api.Domain.Entities.LocationData { Latitude = 50.0, Longitude = 19.0 },
                 FilterFunctions = new LockerFunctionsFilter(false, false)
             };
 

@@ -14,10 +14,10 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost5173",
+    options.AddPolicy("AllowLocalhost",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins("http://localhost")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowLocalhost5173");
+app.UseCors("AllowLocalhost");
 app.UseAuthorization();
 
 app.MapControllers();
