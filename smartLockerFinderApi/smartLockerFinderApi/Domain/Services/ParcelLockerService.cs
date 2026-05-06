@@ -17,63 +17,35 @@ public class ParcelLockerService : IParcelLockerService
         _logger = logger;
     }
 
-    public IEnumerable<ParcelLockerItemDto> FilterLockersByFunctions(
+    public IList<ParcelLockerItemDto> FilterLockersByFunctions(
         IEnumerable<ParcelLockerItemDto> parcelLockers,
         LockerFunctionsFilter filters)
     {
-        if (parcelLockers is null)
-            throw new ArgumentNullException(nameof(parcelLockers), "Lista paczkomatów nie może być null.");
 
-        if (filters is null)
-            throw new ArgumentNullException(nameof(filters), "Filtry nie mogą być null.");
-
-        try
+        if (filters.ReturnEnabled)
         {
-            var filteredItems = parcelLockers;
-
-            if (filters.ReturnEnabled)
-            {
-                filteredItems = filteredItems.Where(i =>
-                    i.Functions != null &&
-                    i.Functions.Contains("parcel_reverse_return_send", StringComparer.OrdinalIgnoreCase));
-            }
-
-            if (filters.AllegroDelivery)
-            {
-                filteredItems = filteredItems.Where(i =>
-                    i.Functions != null &&
-                    i.Functions.Any(f => f.Contains("allegro", StringComparison.OrdinalIgnoreCase)));
-            }
-
-            return filteredItems.ToList();
+            parcelLockers = parcelLockers.Where(i =>
+                i.Functions.Contains("parcel_reverse_return_send", StringComparer.OrdinalIgnoreCase));
         }
-        catch (Exception ex)
+
+        if (filters.AllegroDelivery)
         {
-            _logger.LogError(ex, "Błąd podczas filtrowania paczkomatów.");
-            throw new InvalidOperationException("Wystąpił błąd podczas filtrowania paczkomatów.", ex);
+            parcelLockers = parcelLockers.Where(i =>
+                i.Functions.Any(f => f.Contains("allegro", StringComparison.OrdinalIgnoreCase)));
         }
+
+        return parcelLockers.ToList();
     }
 
     public string BuildPointsUrl(LocationData location)
     {
-        if (location is null)
-            throw new ArgumentNullException(nameof(location), "Dane lokalizacji nie mogą być null.");
+        var queryParams = new List<string>();
 
-        try
-        {
-            var queryParams = new List<string>();
+        var lat = location.Latitude.ToString(CultureInfo.InvariantCulture);
+        var lon = location.Longitude.ToString(CultureInfo.InvariantCulture);
 
-            var lat = location.Latitude.ToString(CultureInfo.InvariantCulture);
-            var lon = location.Longitude.ToString(CultureInfo.InvariantCulture);
+        queryParams.Add($"relative_point={lat},{lon}");
 
-            queryParams.Add($"relative_point={lat},{lon}");
-
-            return $"{BaseUrl}?{string.Join("&", queryParams)}";
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Błąd podczas budowania URL punktów.");
-            throw new InvalidOperationException("Wystąpił błąd podczas budowania adresu URL.", ex);
-        }
+        return $"{BaseUrl}?{string.Join("&", queryParams)}";
     }
 }
