@@ -2,6 +2,7 @@
 using smartLockerFinderApi.Application.Dto;
 using smartLockerFinderApi.Domain.Entities;
 using smartLockerFinderApi.Domain.Services;
+using Moq;
 
 namespace smartLockerFinderApiTests.Domain.Services
 {
@@ -11,7 +12,8 @@ namespace smartLockerFinderApiTests.Domain.Services
 
         public ParcelLockerServiceTests()
         {
-            _service = new ParcelLockerService();
+            var loggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<ParcelLockerService>>();
+            _service = new ParcelLockerService(loggerMock.Object);
         }
 
         [Fact]
@@ -76,15 +78,13 @@ namespace smartLockerFinderApiTests.Domain.Services
         public void BuildPointsUrl_BuildsCorrectUrl_WithLocation()
         {
             // Arrange
-            var location = new LocationData { Latitude = 52.2296756, Longitude = 21.0122287, Limit = 50 };
+            var location = new LocationData { Latitude = 52.2296756, Longitude = 21.0122287 };
 
             // Act
             var result = _service.BuildPointsUrl(location);
 
             // Assert
             Assert.Contains("relative_point=52.2296756,21.0122287", result);
-            Assert.Contains("page=1", result);
-            Assert.Contains("per_page=50", result);
         }
     }
 }

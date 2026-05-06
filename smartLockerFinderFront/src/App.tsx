@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, ZoomControl } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import icon from 'leaflet/dist/images/marker-icon.png'
@@ -41,7 +41,7 @@ function App() {
   const [street, setStreet] = useState('')
   const [allowReturn, setAllowReturn] = useState(true)
   const [allowAllegro, setAllowAllegro] = useState(true)
-  const [blockedSignature, setBlockedSignature] = useState<string | null>(null)
+  const [, setBlockedSignature] = useState<string | null>(null)
   const [deliveryState, setDeliveryState] = useState('Czeka na wpisanie danych')
   const [mapCenter, setMapCenter] = useState({ lat: 52.2297, lng: 21.0122 })
   const [lockerCandidates, setLockerCandidates] = useState<ParcelLockerResult[]>([])
@@ -63,7 +63,6 @@ function App() {
       location: {
         longitude: mapCenter.lng,
         latitude: mapCenter.lat,
-        limit: 300,
       },
       filterFunctions: {
         returnEnabled: allowReturn,
